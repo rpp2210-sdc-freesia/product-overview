@@ -1,13 +1,22 @@
 services:
-  db:
-    image: postgres
+  mongodb_container:
+      image: mongo:latest
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: bradySDC
+      ports:
+        - 27017:27017
+      volumes:
+        - mongodb:/data/db
+  postgresContainer:
+    image: postgres:latest
     restart: always
     environment:
-      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_PASSWORD: bradySDC
     ports:
       - 5432:5432
     volumes:
-      - db:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
 
   backend:
     build:
@@ -17,5 +26,7 @@ services:
       - 3000:3000
 
 volumes:
-  db:
+  postgres:
+    driver: local
+  mongodb:
     driver: local
