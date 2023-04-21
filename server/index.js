@@ -3,6 +3,8 @@ const config = require("../config.js");
 
 const dbHelpers = require('../database/SQL/helpers.js');
 
+const db = require('../database/SQL/index.js');
+
 const app = express();
 
 app.use(express.json());
