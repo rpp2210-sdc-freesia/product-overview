@@ -1,5 +1,6 @@
 const config = require('../../config.js');
 const mongoose = require('mongoose');
+console.log(config);
 	mongoose.connect(`mongodb://${config.mongo_ip}` , {
 		authSource: "admin",
 		user: config.mongo_user,
