@@ -10,8 +10,11 @@ services:
         - mongodb:/data/db
   postgres_container:
     image: postgres:latest
+    container_name: ${PG_CONTAINER_NAME}
     restart: always
     environment:
+      POSTGRES_DB: ${PGDATABASE}
+      POSTGRES_USER: ${POSTGRESUSR}
       POSTGRES_PASSWORD: ${POSTGRESPASS}
     ports:
       -  ${POSTGRESPORT}:${POSTGRESPORT}

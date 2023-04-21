@@ -1,7 +1,7 @@
 const express = require("express");
 const config = require("../config.js");
 
-const mongoHelpers = require("../database/NoSQL/helpers");
+const dbHelpers = require('../database/SQL/helpers.js');
 
 const app = express();
 
