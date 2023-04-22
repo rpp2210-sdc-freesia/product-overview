@@ -3,7 +3,7 @@
 ## Info
   Product-Overview is the backend/server part of a larger group of api's for a clothing website. This server serves as an API for hundreds of thousands of products, including styles, features, photos, SKUs, and relations. It is currently a work in progress and may not be fully functional.
 
-##API Endpoints
+## API Endpoints
 None for now [in progress]
 
 ## Technologies Used
@@ -13,7 +13,7 @@ None for now [in progress]
 *Node.js
 *jest
 
-##Installation [To make your own api]
+## Installation [To make your own api]
 To install the project and its dependencies, follow these steps:
 
 1.Clone the repo
