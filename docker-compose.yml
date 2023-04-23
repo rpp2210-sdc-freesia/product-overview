@@ -8,6 +8,7 @@ services:
         - ${MONGOPORT}:${MONGOPORT}
       volumes:
         - mongodb:/data/db
+        - ${PWD}/product_data:/docker-entrypoint-initdb.d/data
   postgres_container:
     image: postgres:latest
     container_name: ${PG_CONTAINER_NAME}

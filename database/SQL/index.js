@@ -19,13 +19,27 @@ db.connect()
 })
 
 
-// db.query(`COPY product_list(product_id,name,slogan,description,category,default_price)
-// FROM '/home/bsbaker/hackreactor/sdc-product-overview/dataSet/product.csv'
-// DELIMITER ','
-// CSV HEADER;`, (err, res) => {
-// 	if (err) {
-// 		console.log('error saving', err);
-// 	}
-// })
+db.query(`SELECT json_build_object(
+    'id', p.product_id,
+    'name', p.name,
+    'slogan', p.slogan,
+    'description', p.description,
+    'category', p.category,
+    'default_price', p.default_price,
+    'features', json_agg(json_build_object(
+        'feature', f.feature,
+        'value', f.value
+    ))
+) AS product
+FROM product_list p
+JOIN product_features f ON p.product_id = f.product_id
+WHERE p.product_id = 11
+GROUP BY p.product_id;`, (err, res) => {
+	if (err) {
+		console.log('error saving', err);
+	} else {
+		console.log(res.rows);
+	}
+})
 
 module.exports = db;
