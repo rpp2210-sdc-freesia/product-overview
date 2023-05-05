@@ -60,7 +60,7 @@ const productStylesSchema = new mongoose.Schema({
 
 const ProductStyles = mongoose.model('ProductStyles', productStylesSchema)
 
-const styleSchema = new mongoose.Schema(
+const styleSchema = new mongoose.Schema({
 		style_id: Number,
 		product_id: Number,
 		name: String,
@@ -71,7 +71,7 @@ const styleSchema = new mongoose.Schema(
 		skus: {
 			sku: { type: Map, of: skuSchema },
 		}
-);
+	});
 
 const feature = mongoose.model('feature', productFeatureSchema)
 
