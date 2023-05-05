@@ -1,7 +1,7 @@
-const getProductList = require('../../database/SQL/helpers.js').getProductList;
+const {getProductList} = require('../../database/SQL/helpers.js');
 
 module.exports = (req, res) => {
-	const query = req.query
+	const query = req.query;
 	const count = query.count ? Number(query.count) : 5;
 	const page = query.page ? Number(query.page) : 1;
 	getProductList(count, page)

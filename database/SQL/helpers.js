@@ -1,24 +1,5 @@
 const db = require('./index.js');
 
-/*
-SELECT json_build_object(
-				'id', p.product_id,
-				'name', p.name,
-				'slogan', p.slogan,
-				'description', p.description,
-				'category', p.category,
-				'default_price', p.default_price,
-				'features', json_agg(json_build_object(
-						'feature', f.feature,
-						'value', f.value
-				)))
-				AS product
-				FROM product_list p
-				JOIN product_features f ON p.product_id = f.product_id
-				WHERE p.product_id = ${i}
-				GROUP BY p.product_id;
-*/
-
 var getProductList = async (count, page) => {
 	return new Promise (async (resolve, reject) => {
 		var result = [];
@@ -46,10 +27,73 @@ var getProductList = async (count, page) => {
 				.catch((err) => {
 					reject(err);
 					return;
-				})
+				});
 		}
 		resolve(result);
 	});
-}
+};
 
-module.exports = {getProductList};
+var getProductInfo = async (id) => {
+	return new Promise ((resolve, reject) => {
+		db.query(`
+		SELECT json_build_object(
+			'id', p.product_id,
+			'name', p.name,
+			'slogan', p.slogan,
+			'description', p.description,
+			'category', p.category,
+			'default_price', p.default_price,
+			'features', json_agg(json_build_object(
+					'feature', f.feature,
+					'value', f.value
+			)))
+			AS product
+			FROM product_list p
+			JOIN product_features f ON p.product_id = f.product_id
+			WHERE p.product_id = ${id}
+			GROUP BY p.product_id;
+			`)
+			.then((data) => {
+				resolve(data.rows[0].product);
+			})
+			.catch((err) => {
+				reject(err);
+			});
+	});
+};
+
+var getProductStyles = (id) => {
+	return new Promise((resolve, reject) => {
+		db.query(`
+			SELECT json_agg(json_build_object(
+				'style_id', s.style_id,
+				'name', s.name,
+				'sale_price', s.sale_price,
+				'original_price', s.original_price,
+				'default?', s."default?",
+				'photos', (
+						SELECT json_agg(json_build_object(
+								'thumbnail_url', p.thumbnail_url,
+								'url', p.url
+						))
+						FROM photos p
+						WHERE p.style_id = s.style_id
+				)))
+			AS results
+			FROM product_styles s
+			WHERE s.product_id = ${id}
+			GROUP BY s.product_id;
+	`)
+		.then((data) => {
+			var result = {product_id: id, results: data.results};
+			resolve(result);
+		})
+		.catch((err) => {
+			reject(err);
+		});
+	});
+};
+
+
+
+module.exports = {getProductList, getProductInfo, getProductStyles};
