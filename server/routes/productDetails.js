@@ -1,19 +1,21 @@
-const { getProductStyles } = require('../../database/SQL/helpers');
+const dbHelpers = require('../../database/SQL/helpers.js');
 
-module.exports = (req, res) => {
+
+module.exports = (req, res, helperKey) => {
 	var id = req.params.product_id;
 	if (isNaN(Number(id))) {
 		res.statusCode = 404;
 		res.send('Error: Invalid product id provided');
+		return;
 	}
-	getProductStyles(id)
+	dbHelpers[helperKey](id)
 	.then((data) => {
 		res.statusCode = 200;
 		res.send(JSON.stringify(data));
 	})
 	.catch((err) => {
-		console.log("Error fetching product styles", err);
+		console.log(`Error fetching ${helperKey.slice(3)}`, err);
 		res.statusCode = 422;
-		res.end();
-	})
+		res.send(JSON.stringify(err));
+	});
 }

@@ -96,6 +96,22 @@ var getProductStyles = (id) => {
 	});
 };
 
+var getRelatedProducts = (id) => {
+	return new Promise((resolve, reject) => {
+		db.query(`
+			SELECT ARRAY_AGG(related_product_id)
+			AS related
+			FROM related_products
+			WHERE related_products.current_product_id = ${id}
+		`)
+		.then((data) => {
+			resolve(data.rows[0].related);
+		})
+		.catch((err) => {
+			reject(err);
+		});
+	});
+};
 
 
-module.exports = {getProductList, getProductInfo, getProductStyles};
+module.exports = {getProductList, getProductInfo, getProductStyles, getRelatedProducts};
