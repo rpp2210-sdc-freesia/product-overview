@@ -36,22 +36,24 @@ var getProductList = async (count, page) => {
 var getProductInfo = async (id) => {
 	return new Promise ((resolve, reject) => {
 		db.query(`
-		SELECT json_build_object(
-			'id', p.product_id,
-			'name', p.name,
-			'slogan', p.slogan,
-			'description', p.description,
-			'category', p.category,
-			'default_price', p.default_price,
-			'features', json_agg(json_build_object(
-					'feature', f.feature,
-					'value', f.value
-			)))
+			SELECT json_build_object(
+				'id', p.product_id,
+				'name', p.name,
+				'slogan', p.slogan,
+				'description', p.description,
+				'category', p.category,
+				'default_price', p.default_price,
+				'features', (
+					SELECT COALESCE(json_agg(json_build_object(
+							'feature', f.feature,
+							'value', f.value
+					)), '[]')
+					FROM product_features f
+					WHERE p.product_id = f.product_id AND f.feature IS NOT NULL AND f.value IS NOT NULL
+				))
 			AS product
 			FROM product_list p
-			JOIN product_features f ON p.product_id = f.product_id
-			WHERE p.product_id = ${id}
-			GROUP BY p.product_id;
+			WHERE p.product_id = ${id};
 			`)
 			.then((data) => {
 				resolve(data.rows[0].product);
@@ -72,12 +74,12 @@ var getProductStyles = (id) => {
 				'original_price', s.original_price,
 				'default?', s."default?",
 				'photos', (
-						SELECT json_agg(json_build_object(
+						SELECT COALESCE(json_agg(json_build_object(
 								'thumbnail_url', p.thumbnail_url,
 								'url', p.url
-						))
+						)), '[]')
 						FROM photos p
-						WHERE p.style_id = s.style_id
+						WHERE p.style_id = s.style_id AND p.thumbnail_url IS NOT NULL AND p.url IS NOT NULL
 				)))
 			AS results
 			FROM product_styles s
@@ -85,7 +87,7 @@ var getProductStyles = (id) => {
 			GROUP BY s.product_id;
 	`)
 		.then((data) => {
-			var result = {product_id: id, results: data.results};
+			var result = {product_id: id, results: data.rows[0].results};
 			resolve(result);
 		})
 		.catch((err) => {

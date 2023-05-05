@@ -1,7 +1,11 @@
 const { getProductStyles } = require('../../database/SQL/helpers');
 
 module.exports = (req, res) => {
-	var id = req.params.product_id ? req.params.product_id : req.query.product_id;
+	var id = req.params.product_id;
+	if (isNaN(Number(id))) {
+		res.statusCode = 404;
+		res.send('Error: Invalid product id provided');
+	}
 	getProductStyles(id)
 	.then((data) => {
 		res.statusCode = 200;

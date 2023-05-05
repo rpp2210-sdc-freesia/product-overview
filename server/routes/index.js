@@ -7,16 +7,12 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-	if (req.query.product_id) { //Handles query to product_id
-		productInfo(req, res);
-	} else {
-		productList(req, res);
-	}
+	productList(req, res);
 });
 
-router.get('/product_id=:product_id', productInfoRoute);
+router.get('/:product_id', productInfoRoute);
 
-router.get('/product_id=:product_id/styles', productStylesRoute);
+router.get('/:product_id/styles', productStylesRoute);
 
 module.exports = router
 

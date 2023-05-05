@@ -1,7 +1,11 @@
 const {getProductInfo} = require('../../database/SQL/helpers.js');
 
 module.exports = (req, res, next) => {
-	var id = req.params.product_id ? req.params.product_id : req.query.product_id;
+	var id = req.params.product_id;
+	if (isNaN(Number(id))) {
+		res.statusCode = 404;
+		res.send('Error: Invalid product id provided');
+	}
 	getProductInfo(id)
 	.then((data) => {
 		res.statusCode = 200;
@@ -10,6 +14,6 @@ module.exports = (req, res, next) => {
 	.catch((err) => {
 		console.log("Error fetching product info", err);
 		res.statusCode = 422;
-		res.end();
+		res.send(JSON.stringify(err));
 	});
 }
