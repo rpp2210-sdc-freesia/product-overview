@@ -87,7 +87,10 @@ var getProductStyles = (id) => {
 			GROUP BY s.product_id;
 	`)
 		.then((data) => {
-			var result = {product_id: id, results: data.rows[0].results};
+			var result = {product_id: id, results: []};
+			if (data.rows[0]) {
+				result.results = data.rows[0].results;
+			}
 			resolve(result);
 		})
 		.catch((err) => {
