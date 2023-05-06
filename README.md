@@ -5,8 +5,11 @@
 
 ## API Endpoints
 /products - retrieve a list of products [querys = count and page]
+
 /products/:product_id - retrieve info for a specified product
+
 /products/:product_id/styles - retrieve styles for a products
+
 /products/:product_id/related - retrieve a list of related products
 
 
