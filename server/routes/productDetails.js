@@ -6,6 +6,7 @@ module.exports = (req, res, helperKey) => {
 	var id = req.params.product_id;
 	if (isNaN(Number(id))) {
 		res.statusCode = 404;
+		res.setHeader('Content-Type', 'text/plain; charset=utf-8');
 		res.send('Error: Invalid product id provided');
 		return;
 	}

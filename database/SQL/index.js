@@ -18,7 +18,4 @@ db.connect()
 	console.log('Error connecting to database ', err)
 })
 
-//769913
-//photos - 10000
-
 module.exports = db;
