@@ -84,6 +84,13 @@ describe('/products/:product_id', () => {  //---------------------------------- 
     }
   });
 
+  it ('should return product even when it has no features', async () => {
+    var response = await request(app).get('/products/10');
+    expect(response.body.id).toBe(10);
+    expect(response.body.features).toEqual([]);
+    expect(response.body.name).toBe('Infinity Stone');
+  });
+
   it ('should return the correct product', async () => {
     var response = await request(app).get('/products/56789');
     expect(response.body).toEqual(productData.id_56789);
@@ -109,7 +116,14 @@ describe('/products/:product_id/styles', () => {
     for (var i = 1000; i < 1200; i++) {
       var response = await request(app).get(`/products/${i}/styles`);
       expect(typeof(response)).toBe('object');
-      expect(response.body.id).toBe(i);
+      expect(Number(response.body.product_id)).toBe(i);
     }
   });
+
+  it ('should return product id and empty styles array when product has no styles' , async () => {
+    var response = await request(app).get('/products/1000/styles');
+    expect(Number(response.body.product_id)).toBe(1000);
+    expect(response.body.results).toEqual([]);
+  });
+
 });
