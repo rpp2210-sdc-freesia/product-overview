@@ -18,14 +18,7 @@ db.connect()
 	console.log('Error connecting to database ', err)
 })
 
-
-// db.query(`COPY product_list(product_id,name,slogan,description,category,default_price)
-// FROM '/home/bsbaker/hackreactor/sdc-product-overview/dataSet/product.csv'
-// DELIMITER ','
-// CSV HEADER;`, (err, res) => {
-// 	if (err) {
-// 		console.log('error saving', err);
-// 	}
-// })
+//769913
+//photos - 10000
 
 module.exports = db;
