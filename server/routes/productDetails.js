@@ -2,6 +2,7 @@ const dbHelpers = require('../../database/SQL/helpers.js');
 
 
 module.exports = (req, res, helperKey) => {
+	console.log('request for ', helperKey);
 	var id = req.params.product_id;
 	if (isNaN(Number(id))) {
 		res.statusCode = 404;
