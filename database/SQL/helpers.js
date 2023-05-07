@@ -108,6 +108,9 @@ var getRelatedProducts = (id) => {
 			WHERE related_products.current_product_id = ${id}
 		`)
 		.then((data) => {
+			if (!data.rows[0].related) {
+				resolve([]);
+			}
 			resolve(data.rows[0].related);
 		})
 		.catch((err) => {

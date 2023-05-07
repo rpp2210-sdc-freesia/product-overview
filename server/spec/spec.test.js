@@ -27,7 +27,7 @@ describe('GET /products', () => { //----------------------Product list
   });
 
   it ('should return an array with length 5', async () => {
-    const response = await request(app).get('/products')
+    const response = await request(app).get('/products');
     expect(Array.isArray(response.body)).toBe(true);
     expect(response.body.length).toBe(5);
   });
@@ -124,6 +124,41 @@ describe('/products/:product_id/styles', () => {
     var response = await request(app).get('/products/1000/styles');
     expect(Number(response.body.product_id)).toBe(1000);
     expect(response.body.results).toEqual([]);
+  });
+
+
+  it ('should return the correct styles', async () => {
+    var response = await request(app).get('/products/7564/styles');
+    expect(response.body).toEqual(productData.styles_7564);
+    var response = await request(app).get('/products/10956/styles');
+    expect(response.body).toEqual(productData.styles_10956);
+  });
+
+});
+
+describe('/products/:product_id/related', () => {
+  it ('should return status code of 200 with product id 1' , async () => {
+    var response = await request(app).get('/products/1/related');
+    expect(response.statusCode).toBe(200);
+  });
+
+  it ('should return an array', async () => {
+    for (var i = 5670; i < 5690; i++) {
+      var response = await request(app).get(`/products/${i}/related`);
+      expect(Array.isArray(response.body)).toBe(true);
+    }
+  });
+
+  it ('should return an empty array with no related products', async () => {
+    var response = await request(app).get('/products/10/related');
+    expect(response.body).toEqual([]);
+  });
+
+  it ('should return the correct related products', async () => {
+    var response = await request(app).get('/products/1890/related');
+    expect(response.body).toEqual([1269,1281,791,306,955]);
+    response = await request(app).get('/products/106780/related');
+    expect(response.body).toEqual([1481,1992,93263,29540,44475]);
   });
 
 });

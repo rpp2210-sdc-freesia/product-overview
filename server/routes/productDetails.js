@@ -20,4 +20,4 @@ module.exports = (req, res, helperKey) => {
 		res.statusCode = 422;
 		res.send(JSON.stringify(err));
 	});
-}
+};
