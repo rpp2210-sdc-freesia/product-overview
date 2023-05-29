@@ -1,7 +1,6 @@
 const dbHelpers = require('../../database/SQL/helpers.js');
 
-
-module.exports = (req, res, helperKey) => {
+module.exports = async (req, res, helperKey) => {
 	// console.log('request for ', helperKey);
 	var id = req.params.product_id;
 	if (isNaN(Number(id))) {
@@ -10,8 +9,15 @@ module.exports = (req, res, helperKey) => {
 		res.send('Error: Invalid product id provided');
 		return;
 	}
+
+	var found = await checkRedis(res, helperKey, id, redisObj.client);
+	if (found) {
+		return;
+	}
+
 	dbHelpers[helperKey](id)
 	.then((data) => {
+		redisObj.client.setEx(helperKey + id, redisObj.expiration, JSON.stringify(data));
 		res.statusCode = 200;
 		res.send(JSON.stringify(data));
 	})
@@ -19,5 +25,21 @@ module.exports = (req, res, helperKey) => {
 		console.log(`Error fetching ${helperKey.slice(3)}`, err);
 		res.statusCode = 422;
 		res.send(JSON.stringify(err));
+	});
+};
+
+const checkRedis = (res, helperKey, id, redisClient) => {
+	return redisClient.get(helperKey + id)
+	.then((data) => {
+		if (data != null) {
+			res.statusCode = 200;
+			res.send(data);
+			return true;
+		}
+		return false;
+	})
+	.catch((err) => {
+		console.log("Error fetching with redis ", err);
+		return false;
 	});
 };
