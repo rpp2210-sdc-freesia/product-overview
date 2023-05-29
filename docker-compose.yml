@@ -1,26 +1,26 @@
 services:
-  mongodb_container:
-      image: mongo:latest
-      environment:
-        MONGO_INITDB_ROOT_USERNAME: ${MONGOUSR}
-        MONGO_INITDB_ROOT_PASSWORD: ${MONGOPASS}
-      ports:
-        - ${MONGOPORT}:${MONGOPORT}
-      volumes:
-        - mongodb:/data/db
-        - ${PWD}/product_data:/docker-entrypoint-initdb.d/data
-  postgres_container:
-    image: postgres:latest
-    container_name: ${PG_CONTAINER_NAME}
-    restart: always
-    environment:
-      POSTGRES_DB: ${PGDATABASE}
-      POSTGRES_USER: ${POSTGRESUSR}
-      POSTGRES_PASSWORD: ${POSTGRESPASS}
-    ports:
-      -  ${POSTGRESPORT}:${POSTGRESPORT}
-    volumes:
-      - postgres:/var/lib/postgresql/data
+  # mongodb_container: Uncomment if using local databases
+  #     image: mongo:latest
+  #     environment:
+  #       MONGO_INITDB_ROOT_USERNAME: ${MONGOUSR}
+  #       MONGO_INITDB_ROOT_PASSWORD: ${MONGOPASS}
+  #     ports:
+  #       - ${MONGOPORT}:${MONGOPORT}
+  #     volumes:
+  #       - mongodb:/data/db
+  #       - ${PWD}/product_data:/docker-entrypoint-initdb.d/data
+  # postgres_container:
+  #   image: postgres:latest
+  #   container_name: ${PG_CONTAINER_NAME}
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: ${PGDATABASE}
+  #     POSTGRES_USER: ${POSTGRESUSR}
+  #     POSTGRES_PASSWORD: ${POSTGRESPASS}
+  #   ports:
+  #     -  ${POSTGRESPORT}:${POSTGRESPORT}
+  #   volumes:
+  #     - postgres:/var/lib/postgresql/data
 
 
   backend:

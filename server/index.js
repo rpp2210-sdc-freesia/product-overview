@@ -14,6 +14,10 @@ app.use((req, res, next) => {
 
 app.use('/products', routes);
 
+app.get('/loaderio-090bf72491f8eefcd231eef8f800ac66/', (req, res) => {
+  res.send('loaderio-090bf72491f8eefcd231eef8f800ac66');
+});
+
 app.listen(config.port, () => {
   console.log("Server listening on port ", config.port);
 });
