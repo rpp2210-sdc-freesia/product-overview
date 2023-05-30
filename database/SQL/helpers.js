@@ -1,32 +1,27 @@
 const db = require('./index.js');
 
-var getProductList = async (count, page) => {
+var getProductList = (count, page) => {
 	return new Promise (async (resolve, reject) => {
-		var result = [];
-		await db.query(`SELECT json_build_object(
-			'id', p.product_id,
-			'name', p.name,
-			'slogan', p.slogan,
-			'description', p.description,
-			'category', p.category,
-			'default_price', p.default_price
-			)
-			AS product
-			FROM product_list p
-			WHERE p.product_id = ${i}
-			GROUP BY p.product_id;`, [page, count])
-			.then((data) => {
-				if (data.rows.length === 0) {
-					resolve(result);
-					return;
-				}
-				result.push(data.rows[0].product);
-			})
-			.catch((err) => {
-				reject(err);
-				return;
-			});
-		resolve(result);
+	db.query(`
+		SELECT
+			p.product_id AS id,
+			p.name,
+			p.slogan,
+			p.description,
+			p.category,
+			p.default_price
+		FROM
+			product_list p
+		OFFSET ($1::INTEGER - 1) * $2::INTEGER
+		LIMIT $2::INTEGER;
+		`, [page, count])
+		.then((data) => {
+			resolve(data.rows);
+		})
+		.catch((err) => {
+			reject(err);
+			return;
+		});
 	});
 };
 

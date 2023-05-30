@@ -8,15 +8,14 @@ redisClient.connect().then(() => {
 	console.log("Error connecting to redis ", err);
 });
 
-const REDIS_EXPIRATION = 3600;
+const REDIS_EXPIRATION = 360;
 
-const checkRedis = (res, key) => {
+const checkRedis = (key) => {
+	console.log(key);
 	return redisClient.get(key)
 	.then((data) => {
 		if (data != null) {
-			res.statusCode = 200;
-			res.send(data);
-			return true;
+			return data;
 		}
 		return false;
 	})
@@ -27,7 +26,7 @@ const checkRedis = (res, key) => {
 };
 
 const setRedis = (key, data) => {
-	redisClient.setEx(key, REDIS_EXPIRATION, JSON.stringify(data));
+	redisClient.setEx(key, REDIS_EXPIRATION, data);
 }
 
 module.exports = {checkRedis, setRedis};
