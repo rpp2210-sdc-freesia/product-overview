@@ -60,45 +60,47 @@ var getProductInfo = async (id) => {
 var getProductStyles = (id) => {
 	return new Promise((resolve, reject) => {
 		db.query(`
-			SELECT
-				s.style_id AS style_id,
-				s.name,
-				s.sale_price,
-				s.original_price,
-				s."default?" AS "default?",
-				(
-					SELECT COALESCE(
-						json_agg(
-							jsonb_build_object(
-									'thumbnail_url', p.thumbnail_url,
-									'url', p.url
-							)
-						),
-						'[]'::json
-					)
-					FROM photos p
-					WHERE p.style_id = s.style_id AND p.thumbnail_url IS NOT NULL AND p.url IS NOT NULL
-				) AS photos,
-				(
-					SELECT COALESCE(
-						(
-							SELECT jsonb_object_agg(sk.id, jsonb_build_object(
-							'quantity', sk.quantity,
-							'size', sk.size
-							))
-							FROM skus sk
-							WHERE sk.style_id = s.style_id AND sk.quantity IS NOT NULL AND sk.size IS NOT NULL
-						),
-						'{}'::jsonb
-					)
-				) AS skus
-			FROM product_styles s
-			WHERE s.product_id = ${id};
+			SELECT json_agg(results) AS results
+			FROM (
+					SELECT
+							s.style_id,
+							s.name,
+							s.original_price,
+							s.sale_price,
+							s."default?",
+							(
+									SELECT COALESCE(
+											json_agg(
+													jsonb_build_object(
+															'thumbnail_url', p.thumbnail_url,
+															'url', p.url
+													)
+											),
+											'[]'::json
+									)
+									FROM photos p
+									WHERE p.style_id = s.style_id AND p.thumbnail_url IS NOT NULL AND p.url IS NOT NULL
+							) AS photos,
+							(
+									SELECT COALESCE(
+											jsonb_object_agg(sk.id, jsonb_build_object(
+													'quantity', sk.quantity,
+													'size', sk.size
+											)),
+											'{}'::jsonb
+									)
+									FROM skus sk
+									WHERE sk.style_id = s.style_id AND sk.quantity IS NOT NULL AND sk.size IS NOT NULL
+							) AS skus
+					FROM product_list p
+					LEFT JOIN product_styles s ON p.product_id = s.product_id
+					WHERE p.product_id = ${id}
+			) AS results;
 		`)
 		.then((data) => {
 			var result = {product_id:id, results: []};
 			if (data.rows[0]) {
-				result.results = data.rows[0];
+				result.results = data.rows[0].results;
 			}
 			resolve(result);
 		})
