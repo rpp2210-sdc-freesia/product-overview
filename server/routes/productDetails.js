@@ -16,17 +16,17 @@ module.exports = async (req, res, helperKey) => {
 		return;
 	}
 
-	// var redisData = await redisHelpers.checkRedis(helperKey + id);
+	var redisData = await redisHelpers.checkRedis(helperKey + id);
 
-	// if (redisData) {
-	// 	sendData(redisData);
-	// 	return;
-	// };
+	if (redisData) {
+		sendData(redisData);
+		return;
+	};
 
 	dbHelpers[helperKey](id)
 	.then((data) => {
 		var stringData = JSON.stringify(data);
-		// redisHelpers.setRedis(helperKey + id, stringData);
+		redisHelpers.setRedis(helperKey + id, stringData);
 		sendData(stringData);
 	})
 	.catch((err) => {

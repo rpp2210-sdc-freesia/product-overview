@@ -8,13 +8,13 @@ redisClient.connect().then(() => {
 	console.log("Error connecting to redis ", err);
 });
 
-const REDIS_EXPIRATION = 360;
+const REDIS_EXPIRATION = 1800;
 
 const checkRedis = (key) => {
-	console.log(key);
 	return redisClient.get(key)
 	.then((data) => {
 		if (data != null) {
+			redisClient.expire(key, REDIS_EXPIRATION);
 			return data;
 		}
 		return false;
