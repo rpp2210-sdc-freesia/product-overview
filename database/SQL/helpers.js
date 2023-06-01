@@ -1,5 +1,6 @@
 const db = require('./index.js');
-
+//1000011
+//106780
 var getProductList = async (count, page) => {
 	return new Promise (async (resolve, reject) => {
 		var result = [];

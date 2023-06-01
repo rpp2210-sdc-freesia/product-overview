@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1683408242269" clover="3.2.0">
-  <project timestamp="1683408242269" name="All files">
+<coverage generated="1683430929275" clover="3.2.0">
+  <project timestamp="1683430929276" name="All files">
     <metrics statements="95" coveredstatements="81" conditionals="12" coveredconditionals="11" methods="30" coveredmethods="23" elements="137" coveredelements="115" complexity="0" loc="95" ncloc="95" packages="5" files="8" classes="8"/>
     <package name="sdc-product-overview">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
