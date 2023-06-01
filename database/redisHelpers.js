@@ -1,5 +1,8 @@
+const config = require('../config.js');
+
 const Redis = require('redis');
-const redisClient = Redis.createClient();  //Input {url: "url"} for deployed
+console.log (config.redis_ip);
+const redisClient = Redis.createClient({url: config.redis_ip});  //Input {url: "url"} for deployed
 
 redisClient.connect().then(() => {
 	console.log("Connected to Redis DB");

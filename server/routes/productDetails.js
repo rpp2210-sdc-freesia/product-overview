@@ -17,7 +17,6 @@ module.exports = async (req, res, helperKey) => {
 	}
 
 	var redisData = await redisHelpers.checkRedis(helperKey + id);
-
 	if (redisData) {
 		sendData(redisData);
 		return;

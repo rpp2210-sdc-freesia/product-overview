@@ -12,5 +12,7 @@ module.exports = {
   post_pass: process.env.POSTGRESPASS,
   post_db: process.env.PGDATABASE,
   post_port: process.env.POSTGRESPORT,
-  post_ip: process.env.POSTGRESIP
+  post_ip: process.env.POSTGRESIP,
+
+  redis_ip: process.env.REDISIP
 };

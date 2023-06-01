@@ -12,11 +12,12 @@ module.exports = async (req, res, redisObj) => {
 	const count = query.count ? Number(query.count) : 5;
 	const page = query.page ? Number(query.page) : 1;
 
-	var redisKey = count + "" + page;
+	var redisKey = "page:" + count + "count:" + page;
 
 	var redisData = await redisHelpers.checkRedis(redisKey);
 
 	if (redisData) {
+		console.log(redisData);
 		sendData(redisData);
 		return;
 	}
