@@ -1,26 +1,25 @@
 services:
-  # mongodb_container: Uncomment if using local databases
-  #     image: mongo:latest
-  #     environment:
-  #       MONGO_INITDB_ROOT_USERNAME: ${MONGOUSR}
-  #       MONGO_INITDB_ROOT_PASSWORD: ${MONGOPASS}
-  #     ports:
-  #       - ${MONGOPORT}:${MONGOPORT}
-  #     volumes:
-  #       - mongodb:/data/db
-  #       - ${PWD}/product_data:/docker-entrypoint-initdb.d/data
-  # postgres_container:
-  #   image: postgres:latest
-  #   container_name: ${PG_CONTAINER_NAME}
-  #   restart: always
-  #   environment:
-  #     POSTGRES_DB: ${PGDATABASE}
-  #     POSTGRES_USER: ${POSTGRESUSR}
-  #     POSTGRES_PASSWORD: ${POSTGRESPASS}
-  #   ports:
-  #     -  ${POSTGRESPORT}:${POSTGRESPORT}
-  #   volumes:
-  #     - postgres:/var/lib/postgresql/data
+  postgres_container:
+    image: postgres:latest
+    container_name: ${PG_CONTAINER_NAME}
+    restart: always
+    environment:
+      POSTGRES_DB: ${PG_DATABASE}
+      POSTGRES_USER: ${PG_USR}
+      POSTGRES_PASSWORD: ${PG_PASS}
+    ports:
+      -  ${PG_PORT}:${PG_PORT}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  redis_container:
+    image: redis:latest
+    container_name: ${REDIS_CONTAINER_NAME}
+    restart: always
+    ports:
+      -  ${REDIS_PORT}:${REDIS_PORT}
+    volumes:
+      - redis:/var/lib/redis/data
 
 
   backend:
@@ -33,5 +32,5 @@ services:
 volumes:
   postgres:
     driver: local
-  mongodb:
+  redis:
     driver: local

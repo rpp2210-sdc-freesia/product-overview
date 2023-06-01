@@ -4,7 +4,7 @@ const config = require('../../config.js');
 
 const db = new Client({
 	user: config.post_user,
-	host: config.post_ip,
+	host: config.post_name,
 	database: config.post_db,
 	password: config.post_pass,
 	port: config.post_port
